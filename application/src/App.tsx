@@ -1,24 +1,48 @@
-import React from "react";
-import logo from "./logo.svg";
+import React, { useEffect, useState } from "react";
 import "./App.css";
+import ChristmasTree from "./components/ChristmasTree/ChristmasTree";
+
+export interface IPresent {
+  value: number;
+  content: string;
+}
+
+export const PresentContext = React.createContext<IPresent[]>([]);
 
 function App() {
+  const [presents, setPresents] = useState<IPresent[]>([]);
+
+  const handlePresents = () => {
+    const presents: IPresent[] = [
+      {
+        value: 5,
+        content: "test",
+      },
+      {
+        value: 25,
+        content: "test2",
+      },
+      {
+        value: 50,
+        content: "test3",
+      },
+    ];
+    setPresents(presents);
+  };
+
+  useEffect(() => {
+    handlePresents();
+  }, []);
+
+  if (!presents) {
+    return <div>loading</div>;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <PresentContext.Provider value={presents}>
+        <ChristmasTree />
+      </PresentContext.Provider>
     </div>
   );
 }
